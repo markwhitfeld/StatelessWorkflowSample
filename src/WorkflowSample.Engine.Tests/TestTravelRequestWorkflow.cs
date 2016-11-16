@@ -84,5 +84,18 @@ namespace WorkflowSample.Engine.Tests
             // Assert
             Assert.AreEqual(TravelRequestState.ProcurementApproval, travelRequest.Status);
         }
+
+        [Test]
+        public void Approve_WhenManagerApproval_ShouldSetToProcurementApproval()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = false };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Approve(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.ProcurementApproval, travelRequest.Status);
+        }
     }
 }

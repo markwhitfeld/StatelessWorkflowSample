@@ -22,6 +22,9 @@ namespace WorkflowSample.Engine
             stateMachine.Configure(TravelRequestState.HRApproval)
                 .Permit(TravelRequestTransition.Approve, TravelRequestState.ProcurementApproval);
 
+            stateMachine.Configure(TravelRequestState.ManagerApproval)
+                .Permit(TravelRequestTransition.Approve, TravelRequestState.ProcurementApproval);
+
             return stateMachine;
         }
 
