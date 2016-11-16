@@ -199,5 +199,44 @@ namespace WorkflowSample.Engine.Tests
             // Assert
             CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
         }
+
+        [Test]
+        public void Approve_WhenHODApproval_GivenNonEmployee_ShouldSetToBookTickets()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = false };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Approve(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.BookTickets, travelRequest.Status);
+        }
+
+        [Test]
+        public void Approve_WhenHODApproval_GivenEmployee_ShouldAutoApproveForHOD_AndSetToBookTickets()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = true };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Approve(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.BookTickets, travelRequest.Status);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenHODApproval_ShouldBe_Approve()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest();
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
     }
 }
