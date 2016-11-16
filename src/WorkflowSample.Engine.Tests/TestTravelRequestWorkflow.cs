@@ -175,6 +175,19 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
+        public void Approve_WhenProcurementApproval_GivenEmployee_ShouldAutoApproveForHOD_AndSetToBookTickets()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = true };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ProcurementApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Approve(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.BookTickets, travelRequest.Status);
+        }
+
+        [Test]
         public void GetAllowedActions_GivenProcurementApproval_ShouldBe_Approve()
         {
             // Arrange

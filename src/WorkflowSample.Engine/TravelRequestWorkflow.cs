@@ -30,6 +30,14 @@ namespace WorkflowSample.Engine
             stateMachine.Configure(TravelRequestState.ProcurementApproval)
                 .Permit(TravelRequestAction.Approve, TravelRequestState.HODApproval);
 
+            stateMachine.Configure(TravelRequestState.HODApproval)
+                .Permit(TravelRequestAction.Approve, TravelRequestState.BookTickets)
+                
+                .OnEntryFrom(TravelRequestAction.Approve, transition =>
+                {
+                    if (travelRequest.IsEmployee) stateMachine.Fire(TravelRequestAction.Approve);
+                });
+
             return stateMachine;
         }
 
