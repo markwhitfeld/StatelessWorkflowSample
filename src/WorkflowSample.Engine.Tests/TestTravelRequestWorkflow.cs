@@ -41,5 +41,18 @@ namespace WorkflowSample.Engine.Tests
             // Assert
             Assert.AreEqual(TravelRequestState.TravelerReview, travelRequest.Status);
         }
+
+        [Test]
+        public void Submit_GivenNonEmployee_ShouldSetToHRApproval()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = false };
+            var workflow = CreateTravelRequestWorkflow();
+            workflow.Init(travelRequest);
+            // Act
+            workflow.Submit(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.HRApproval, travelRequest.Status);
+        }
     }
 }

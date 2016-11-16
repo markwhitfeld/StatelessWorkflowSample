@@ -10,6 +10,7 @@
     {
         New = 0,
         Captured,
-        TravelerReview
+        TravelerReview,
+        HRApproval
     }
 }
