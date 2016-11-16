@@ -4,11 +4,6 @@ namespace WorkflowSample.Engine
 {
     public class TravelRequestWorkflow
     {
-        public void Init(TravelRequest travelRequest)
-        {
-            WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Init);
-        }
-
         private static StateMachine<TravelRequestState, TravelRequestTransition> WithStateMachineFor(TravelRequest travelRequest)
         {
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestTransition>(() => travelRequest.Status,
@@ -23,7 +18,16 @@ namespace WorkflowSample.Engine
 
             stateMachine.Configure(TravelRequestState.TravelerReview)
                 .Permit(TravelRequestTransition.Accept, TravelRequestState.ManagerApproval);
+
+            stateMachine.Configure(TravelRequestState.HRApproval)
+                .Permit(TravelRequestTransition.Approve, TravelRequestState.ProcurementApproval);
+
             return stateMachine;
+        }
+
+        public void Init(TravelRequest travelRequest)
+        {
+            WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Init);
         }
 
         public void Submit(TravelRequest travelRequest)
@@ -34,6 +38,11 @@ namespace WorkflowSample.Engine
         public void Accept(TravelRequest travelRequest)
         {
             WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Accept);
+        }
+
+        public void Approve(TravelRequest travelRequest)
+        {
+            WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Approve);
         }
     }
 }

@@ -4,7 +4,8 @@
     {
         Init = 1,
         Submit,
-        Accept
+        Accept,
+        Approve
     }
 
     public enum TravelRequestState
@@ -13,6 +14,7 @@
         Captured = 1,
         TravelerReview,
         HRApproval,
-        ManagerApproval
+        ManagerApproval,
+        ProcurementApproval
     }
 }
