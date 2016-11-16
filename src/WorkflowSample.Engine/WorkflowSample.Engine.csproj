@@ -52,10 +52,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISupportWorkflowState.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestBookTicketsStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestHODApprovalStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestHRApprovalStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestManagerApprovalStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestProcurementApprovalStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestTravelerReviewStateConfigurator.cs" />
+    <Compile Include="StateMachine\ISupportWorkflowState.cs" />
+    <Compile Include="StateMachine\Configurators\ITravelRequestStateMachineConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestCapturedStateConfigurator.cs" />
+    <Compile Include="StateMachine\Configurators\TravelRequestNewStateConfigurator.cs" />
     <Compile Include="TravelRequestEnums.cs" />
     <Compile Include="TravelRequest.cs" />
+    <Compile Include="StateMachine\TravelRequestStateMachineContext.cs" />
+    <Compile Include="StateMachine\TravelRequestStateMachine.cs" />
     <Compile Include="TravelRequestWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
