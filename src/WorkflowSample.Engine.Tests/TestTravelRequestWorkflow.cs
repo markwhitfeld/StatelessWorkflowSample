@@ -139,7 +139,7 @@ namespace WorkflowSample.Engine.Tests
         public void Approve_WhenManagerApproval_ShouldSetToProcurementApproval()
         {
             // Arrange
-            var travelRequest = new TravelRequest { IsEmployee = false };
+            var travelRequest = new TravelRequest();
             SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
             var workflow = CreateTravelRequestWorkflow();
             // Act
@@ -154,6 +154,32 @@ namespace WorkflowSample.Engine.Tests
             // Arrange
             var travelRequest = new TravelRequest();
             SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
+
+        [Test]
+        public void Approve_WhenProcurementApproval_GivenNonEmployee_ShouldSetToHODApproval()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = false };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ProcurementApproval);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Approve(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.HODApproval, travelRequest.Status);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenProcurementApproval_ShouldBe_Approve()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest();
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ProcurementApproval);
             var workflow = CreateTravelRequestWorkflow();
             // Act
             var allowedActions = workflow.GetAllowedActions(travelRequest);

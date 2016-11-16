@@ -15,6 +15,8 @@
         TravelerReview,
         HRApproval,
         ManagerApproval,
-        ProcurementApproval
+        ProcurementApproval,
+        HODApproval,
+        BookTickets
     }
 }
