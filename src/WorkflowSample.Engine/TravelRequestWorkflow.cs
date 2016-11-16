@@ -32,11 +32,13 @@ namespace WorkflowSample.Engine
 
             stateMachine.Configure(TravelRequestState.HODApproval)
                 .Permit(TravelRequestAction.Approve, TravelRequestState.BookTickets)
-                
                 .OnEntryFrom(TravelRequestAction.Approve, transition =>
                 {
                     if (travelRequest.IsEmployee) stateMachine.Fire(TravelRequestAction.Approve);
                 });
+
+            stateMachine.Configure(TravelRequestState.BookTickets)
+                .Permit(TravelRequestAction.Finish, TravelRequestState.BookingComplete);
 
             return stateMachine;
         }
@@ -64,6 +66,11 @@ namespace WorkflowSample.Engine
         public IEnumerable<TravelRequestAction> GetAllowedActions(TravelRequest travelRequest)
         {
             return WithStateMachineFor(travelRequest).PermittedTriggers;
+        }
+
+        public void Finish(TravelRequest travelRequest)
+        {
+            WithStateMachineFor(travelRequest).Fire(TravelRequestAction.Finish);
         }
     }
 }

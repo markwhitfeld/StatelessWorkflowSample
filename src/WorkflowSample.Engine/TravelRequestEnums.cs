@@ -5,7 +5,8 @@
         Init = 1,
         Submit,
         Accept,
-        Approve
+        Approve,
+        Finish
     }
 
     public enum TravelRequestState
@@ -17,6 +18,7 @@
         ManagerApproval,
         ProcurementApproval,
         HODApproval,
-        BookTickets
+        BookTickets,
+        BookingComplete
     }
 }
