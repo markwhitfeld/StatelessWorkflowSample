@@ -20,12 +20,20 @@ namespace WorkflowSample.Engine
             stateMachine.Configure(TravelRequestState.Captured)
                 .PermitIf(TravelRequestTransition.Submit, TravelRequestState.TravelerReview, () => travelRequest.IsEmployee)
                 .PermitIf(TravelRequestTransition.Submit, TravelRequestState.HRApproval, () => !travelRequest.IsEmployee);
+
+            stateMachine.Configure(TravelRequestState.TravelerReview)
+                .Permit(TravelRequestTransition.Accept, TravelRequestState.ManagerApproval);
             return stateMachine;
         }
 
         public void Submit(TravelRequest travelRequest)
         {
             WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Submit);
+        }
+
+        public void Accept(TravelRequest travelRequest)
+        {
+            WithStateMachineFor(travelRequest).Fire(TravelRequestTransition.Accept);
         }
     }
 }

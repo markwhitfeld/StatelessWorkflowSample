@@ -3,14 +3,16 @@
     public enum TravelRequestTransition
     {
         Init = 1,
-        Submit
+        Submit,
+        Accept
     }
 
     public enum TravelRequestState
     {
         New = 0,
-        Captured,
+        Captured = 1,
         TravelerReview,
-        HRApproval
+        HRApproval,
+        ManagerApproval
     }
 }

@@ -12,8 +12,12 @@ namespace WorkflowSample.Engine.Tests
     {
         private static TravelRequestWorkflow CreateTravelRequestWorkflow()
         {
-            var workflow = new TravelRequestWorkflow();
-            return workflow;
+            return new TravelRequestWorkflow();
+        }
+
+        private static void SetTravelRequestStatus(TravelRequest travelRequest, TravelRequestState travelRequestState)
+        {
+            ((ISupportWorkflowState<TravelRequestState>) travelRequest).SetStatus(travelRequestState);
         }
 
         [Test]
@@ -30,12 +34,12 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
-        public void Submit_GivenEmployee_ShouldSetToTravelerReview()
+        public void Submit_WhenCaptured_GivenEmployee_ShouldSetToTravelerReview()
         {
             // Arrange
             var travelRequest = new TravelRequest { IsEmployee = true };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.Captured);
             var workflow = CreateTravelRequestWorkflow();
-            workflow.Init(travelRequest);
             // Act
             workflow.Submit(travelRequest);
             // Assert
@@ -43,16 +47,29 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
-        public void Submit_GivenNonEmployee_ShouldSetToHRApproval()
+        public void Submit_WhenCaptured_GivenNonEmployee_ShouldSetToHRApproval()
         {
             // Arrange
             var travelRequest = new TravelRequest { IsEmployee = false };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.Captured);
             var workflow = CreateTravelRequestWorkflow();
-            workflow.Init(travelRequest);
             // Act
             workflow.Submit(travelRequest);
             // Assert
             Assert.AreEqual(TravelRequestState.HRApproval, travelRequest.Status);
+        }
+
+        [Test]
+        public void Accept_WhenTravellerReview_ShouldSetToManagerApproval()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = false };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.TravelerReview);
+            var workflow = CreateTravelRequestWorkflow();
+            // Act
+            workflow.Accept(travelRequest);
+            // Assert
+            Assert.AreEqual(TravelRequestState.ManagerApproval, travelRequest.Status);
         }
     }
 }
