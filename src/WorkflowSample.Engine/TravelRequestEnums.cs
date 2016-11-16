@@ -1,6 +1,6 @@
 ﻿namespace WorkflowSample.Engine
 {
-    public enum TravelRequestTransition
+    public enum TravelRequestAction
     {
         Init = 1,
         Submit,
