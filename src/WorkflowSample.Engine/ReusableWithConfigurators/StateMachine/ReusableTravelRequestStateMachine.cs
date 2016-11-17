@@ -12,7 +12,7 @@ namespace WorkflowSample.Engine
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestAction>(GetState, SetState);
             _stateMachineContext = new TravelRequestStateMachineContext(stateMachine);
 
-            var configurators = new List<ITravelRequestStateMachineConfigurator>
+            var configurators = new List<IReusableTravelRequestStateMachineConfigurator>
             {
                 new TravelRequestNewStateConfigurator(),
                 new TravelRequestCapturedStateConfigurator(),

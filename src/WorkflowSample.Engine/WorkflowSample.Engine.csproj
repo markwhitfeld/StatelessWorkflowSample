@@ -61,10 +61,15 @@
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestProcurementApprovalStateConfigurator.cs" />
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestTravelerReviewStateConfigurator.cs" />
     <Compile Include="ISupportWorkflowState.cs" />
-    <Compile Include="ReusableWithConfigurators\Configurators\ITravelRequestStateMachineConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\IReusableTravelRequestStateMachineConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestCapturedStateConfigurator.cs" />
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestNewStateConfigurator.cs" />
+    <Compile Include="SimpleWithConfigurators\Configurators\ITravelRequestWorkflowConfigurator.cs" />
+    <Compile Include="SimpleWithConfigurators\Configurators\TravelRequestWorkflowGeneralConfigurator.cs" />
+    <Compile Include="SimpleWithConfigurators\Factory\IStateMachineFactory.cs" />
+    <Compile Include="SimpleWithConfigurators\Factory\StateMachineFactory.cs" />
+    <Compile Include="SimpleWithConfigurators\TravelRequestWorkflow_SimpleWithConfigurators.cs" />
     <Compile Include="TravelRequestEnums.cs" />
     <Compile Include="TravelRequest.cs" />
     <Compile Include="ReusableWithConfigurators\StateMachine\TravelRequestStateMachineContext.cs" />

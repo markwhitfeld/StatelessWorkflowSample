@@ -1,6 +1,6 @@
 namespace WorkflowSample.Engine
 {
-    public class TravelRequestHODApprovalStateConfigurator : ITravelRequestStateMachineConfigurator
+    public class TravelRequestHODApprovalStateConfigurator : IReusableTravelRequestStateMachineConfigurator
     {
         public void Configure(TravelRequestStateMachineContext context)
         {

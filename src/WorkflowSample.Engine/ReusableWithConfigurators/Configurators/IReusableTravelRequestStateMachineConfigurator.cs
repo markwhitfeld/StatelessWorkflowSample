@@ -1,6 +1,6 @@
 ﻿namespace WorkflowSample.Engine
 {
-    public interface ITravelRequestStateMachineConfigurator
+    public interface IReusableTravelRequestStateMachineConfigurator
     {
         void Configure(TravelRequestStateMachineContext context);
     }
