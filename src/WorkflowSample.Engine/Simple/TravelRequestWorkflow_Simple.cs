@@ -8,11 +8,14 @@ namespace WorkflowSample.Engine
     public class TravelRequestWorkflow_Simple : ITravelRequestWorkflow
     {
         private readonly IUserSecurityContext _userSecurityContext;
+        private readonly INotifier _notifier;
 
-        public TravelRequestWorkflow_Simple(IUserSecurityContext userSecurityContext)
+        public TravelRequestWorkflow_Simple(IUserSecurityContext userSecurityContext, INotifier notifier)
         {
             if (userSecurityContext == null) throw new ArgumentNullException(nameof(userSecurityContext));
+            if (notifier == null) throw new ArgumentNullException(nameof(notifier));
             _userSecurityContext = userSecurityContext;
+            _notifier = notifier;
         }
 
         private StateMachine<TravelRequestState, TravelRequestAction> WithStateMachineFor(TravelRequest travelRequest)
@@ -28,19 +31,21 @@ namespace WorkflowSample.Engine
                 .PermitIf(TravelRequestAction.Submit, TravelRequestState.HRApproval, () => !travelRequest.IsEmployee);
 
             stateMachine.Configure(TravelRequestState.TravelerReview)
-                .PermitIf(TravelRequestAction.Accept, TravelRequestState.ManagerApproval, () => travelRequest.Traveller == _userSecurityContext.CurrentUser);
+                .PermitIf(TravelRequestAction.Accept, TravelRequestState.ManagerApproval, () => travelRequest.Traveller == _userSecurityContext.CurrentUser, "Traveller")
+                .OnEntry(() => _notifier.Notify("NotifyTravellerOfReview", travelRequest), "Notify Traveller")
+                .OnEntry(() => _notifier.Notify("NotifyTravelAdminOfReview", travelRequest), "Notify Travel Admin");
 
             stateMachine.Configure(TravelRequestState.HRApproval)
-                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser, "Approver");
 
             stateMachine.Configure(TravelRequestState.ManagerApproval)
-                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser, "Approver");
 
             stateMachine.Configure(TravelRequestState.ProcurementApproval)
-                .PermitIf(TravelRequestAction.Approve, TravelRequestState.HODApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.HODApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser, "Approver");
 
             stateMachine.Configure(TravelRequestState.HODApproval)
-                .PermitIf(TravelRequestAction.Approve, TravelRequestState.BookTickets, () => travelRequest.Approver == _userSecurityContext.CurrentUser)
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.BookTickets, () => travelRequest.Approver == _userSecurityContext.CurrentUser, "Approver")
                 .OnEntryFrom(TravelRequestAction.Approve, transition =>
                 {
                     if (travelRequest.IsEmployee) stateMachine.Fire(TravelRequestAction.Approve);
@@ -49,7 +54,6 @@ namespace WorkflowSample.Engine
             stateMachine.Configure(TravelRequestState.BookTickets)
                 .Permit(TravelRequestAction.Finish, TravelRequestState.BookingComplete);
             
-
             return stateMachine;
         }
 

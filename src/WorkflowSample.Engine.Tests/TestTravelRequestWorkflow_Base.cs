@@ -5,6 +5,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace WorkflowSample.Engine.Tests
@@ -12,7 +13,7 @@ namespace WorkflowSample.Engine.Tests
     [TestFixture]
     public abstract class TestTravelRequestWorkflow_Base
     {
-        protected abstract ITravelRequestWorkflow CreateTravelRequestWorkflow(IUserSecurityContext userSecurityContext = null);
+        protected abstract ITravelRequestWorkflow CreateTravelRequestWorkflow(IUserSecurityContext userSecurityContext = null, INotifier notifier = null);
 
         private static void SetTravelRequestStatus(TravelRequest travelRequest, TravelRequestState travelRequestState)
         {
@@ -44,7 +45,7 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
-        public void Submit_WhenCaptured_GivenEmployee_ShouldSetToTravelerReview()
+        public void Submit_WhenCapturedStatus_GivenEmployee_ShouldSetToTravelerReview()
         {
             // Arrange
             var travelRequest = new TravelRequest { IsEmployee = true };
@@ -57,7 +58,35 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
-        public void Submit_WhenCaptured_GivenNonEmployee_ShouldSetToHRApproval()
+        public void Submit_WhenCapturedStatus_GivenEmployee_ShouldNotifyTravelerOfTravelerReview()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = true };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.Captured);
+            var notifier = Substitute.For<INotifier>();
+            var workflow = CreateTravelRequestWorkflow(notifier: notifier);
+            // Act
+            workflow.Submit(travelRequest);
+            // Assert
+            notifier.Received().Notify("NotifyTravellerOfReview", travelRequest);
+        }
+
+        [Test]
+        public void Submit_WhenCapturedStatus_GivenEmployee_ShouldNotifyTravelAdminOfTravelerReview()
+        {
+            // Arrange
+            var travelRequest = new TravelRequest { IsEmployee = true };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.Captured);
+            var notifier = Substitute.For<INotifier>();
+            var workflow = CreateTravelRequestWorkflow(notifier: notifier);
+            // Act
+            workflow.Submit(travelRequest);
+            // Assert
+            notifier.Received().Notify("NotifyTravelAdminOfReview", travelRequest);
+        }
+
+        [Test]
+        public void Submit_WhenCapturedStatus_GivenNonEmployee_ShouldSetToHRApproval()
         {
             // Arrange
             var travelRequest = new TravelRequest { IsEmployee = false };
@@ -70,7 +99,7 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
-        public void GetAllowedActions_GivenCaptured_ShouldBe_Submit()
+        public void GetAllowedActions_GivenCapturedStatus_ShouldBe_Submit()
         {
             // Arrange
             var travelRequest = new TravelRequest();

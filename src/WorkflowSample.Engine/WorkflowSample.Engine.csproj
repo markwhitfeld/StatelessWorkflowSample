@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INotifier.cs" />
     <Compile Include="ITravelRequestWorkflow.cs" />
     <Compile Include="IUserSecurityContext.cs" />
     <Compile Include="ReusableWithConfigurators\TravelRequestWorkflow_ReusableWithConfigurators.cs" />
