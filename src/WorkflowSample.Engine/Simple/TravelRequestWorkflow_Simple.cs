@@ -5,19 +5,10 @@ using Stateless;
 
 namespace WorkflowSample.Engine
 {
-    public class TravelRequestWorkflow
+    public class TravelRequestWorkflow_Simple : ITravelRequestWorkflow
     {
-        public class TravelRequestWorkflowActions
-        {
-            
 
-            public void sass()
-            {
-                
-            }
-        }
-
-        private static StateMachine<TravelRequestState, TravelRequestAction> WithStateMachineForOLD(TravelRequest travelRequest)
+        private static StateMachine<TravelRequestState, TravelRequestAction> WithStateMachineFor(TravelRequest travelRequest)
         {
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestAction>(() => travelRequest.Status,
                 ((ISupportWorkflowState<TravelRequestState>) travelRequest).SetStatus);
@@ -52,11 +43,6 @@ namespace WorkflowSample.Engine
                 .Permit(TravelRequestAction.Finish, TravelRequestState.BookingComplete);
             
             return stateMachine;
-        }
-
-        private TravelRequestStateMachine WithStateMachineFor(TravelRequest travelRequest)
-        {
-            return new TravelRequestStateMachine {CurrentTravelRequest = travelRequest};
         }
 
         public void Init(TravelRequest travelRequest)

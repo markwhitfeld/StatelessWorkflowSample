@@ -10,9 +10,9 @@ namespace WorkflowSample.Engine.Tests
     [TestFixture]
     public class TestTravelRequestWorkflow
     {
-        private static TravelRequestWorkflow CreateTravelRequestWorkflow()
+        private static TravelRequestWorkflow_Simple CreateTravelRequestWorkflow()
         {
-            return new TravelRequestWorkflow();
+            return new TravelRequestWorkflow_Simple();
         }
 
         private static void SetTravelRequestStatus(TravelRequest travelRequest, TravelRequestState travelRequestState)

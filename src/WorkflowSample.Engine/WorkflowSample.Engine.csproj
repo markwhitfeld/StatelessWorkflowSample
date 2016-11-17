@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITravelRequestWorkflow.cs" />
     <Compile Include="StateMachine\Configurators\TravelRequestBookTicketsStateConfigurator.cs" />
     <Compile Include="StateMachine\Configurators\TravelRequestHODApprovalStateConfigurator.cs" />
     <Compile Include="StateMachine\Configurators\TravelRequestHRApprovalStateConfigurator.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="TravelRequest.cs" />
     <Compile Include="StateMachine\TravelRequestStateMachineContext.cs" />
     <Compile Include="StateMachine\TravelRequestStateMachine.cs" />
-    <Compile Include="TravelRequestWorkflow.cs" />
+    <Compile Include="Simple\TravelRequestWorkflow_Simple.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
