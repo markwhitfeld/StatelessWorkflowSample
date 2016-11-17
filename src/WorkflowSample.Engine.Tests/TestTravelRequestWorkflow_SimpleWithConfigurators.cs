@@ -7,7 +7,8 @@ namespace WorkflowSample.Engine.Tests
     {
         protected override ITravelRequestWorkflow CreateTravelRequestWorkflow()
         {
-            var stateMachineFactory = new StateMachineFactory(new TravelRequestWorkflowGeneralConfigurator());
+            var workflowConfigurator = new TravelRequestWorkflowGeneralConfigurator();
+            var stateMachineFactory = new StateMachineFactory(workflowConfigurator);
             return new TravelRequestWorkflow_SimpleWithConfigurators(stateMachineFactory);
         }
     }
