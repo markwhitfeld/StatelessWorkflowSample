@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="A1_DummyTestClas.cs" />
     <Compile Include="TestTravelRequestWorkflow_Base.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTravelRequestWorkflow_ReusableWithConfigurators.cs" />
