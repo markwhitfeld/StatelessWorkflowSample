@@ -31,16 +31,16 @@ namespace WorkflowSample.Engine
                 .PermitIf(TravelRequestAction.Accept, TravelRequestState.ManagerApproval, () => travelRequest.Traveller == _userSecurityContext.CurrentUser);
 
             stateMachine.Configure(TravelRequestState.HRApproval)
-                .Permit(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
 
             stateMachine.Configure(TravelRequestState.ManagerApproval)
-                .Permit(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
 
             stateMachine.Configure(TravelRequestState.ProcurementApproval)
-                .Permit(TravelRequestAction.Approve, TravelRequestState.HODApproval);
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.HODApproval, () => travelRequest.Approver == _userSecurityContext.CurrentUser);
 
             stateMachine.Configure(TravelRequestState.HODApproval)
-                .Permit(TravelRequestAction.Approve, TravelRequestState.BookTickets)
+                .PermitIf(TravelRequestAction.Approve, TravelRequestState.BookTickets, () => travelRequest.Approver == _userSecurityContext.CurrentUser)
                 .OnEntryFrom(TravelRequestAction.Approve, transition =>
                 {
                     if (travelRequest.IsEmployee) stateMachine.Fire(TravelRequestAction.Approve);
@@ -49,6 +49,7 @@ namespace WorkflowSample.Engine
             stateMachine.Configure(TravelRequestState.BookTickets)
                 .Permit(TravelRequestAction.Finish, TravelRequestState.BookingComplete);
             
+
             return stateMachine;
         }
 

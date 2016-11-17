@@ -14,10 +14,10 @@ namespace WorkflowSample.Engine.Tests
                 new TravelRequestNewStateConfigurator(),
                 new TravelRequestCapturedStateConfigurator(),
                 new TravelRequestTravelerReviewStateConfigurator(userSecurityContext),
-                new TravelRequestHRApprovalStateConfigurator(),
-                new TravelRequestManagerApprovalStateConfigurator(),
-                new TravelRequestProcurementApprovalStateConfigurator(),
-                new TravelRequestHODApprovalStateConfigurator(),
+                new TravelRequestHRApprovalStateConfigurator(userSecurityContext),
+                new TravelRequestManagerApprovalStateConfigurator(userSecurityContext),
+                new TravelRequestProcurementApprovalStateConfigurator(userSecurityContext),
+                new TravelRequestHODApprovalStateConfigurator(userSecurityContext),
                 new TravelRequestBookTicketsStateConfigurator(),
             };
             var reusableTravelRequestStateMachine = new ReusableTravelRequestStateMachine(reusableTravelRequestStateMachineConfigurators);

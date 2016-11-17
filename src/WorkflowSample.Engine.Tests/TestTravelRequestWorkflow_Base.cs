@@ -173,6 +173,44 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
+        public void GetAllowedActions_GivenHRApproval_AndNotApprover_ShouldBeEmpty()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = new User("jim");
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HRApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.IsEmpty(allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenHRApproval_AndApproverIsCurrentUser_ShouldBe_Approve()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = approver;
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HRApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
+
+        [Test]
         public void Approve_WhenManagerApproval_ShouldSetToProcurementApproval()
         {
             // Arrange
@@ -192,6 +230,44 @@ namespace WorkflowSample.Engine.Tests
             var travelRequest = new TravelRequest();
             SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
             var workflow = CreateTravelRequestWorkflow();
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenManagerApproval_AndNotApprover_ShouldBeEmpty()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = new User("jim");
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.IsEmpty(allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenManagerApproval_AndApproverIsCurrentUser_ShouldBe_Approve()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = approver;
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ManagerApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
             // Act
             var allowedActions = workflow.GetAllowedActions(travelRequest);
             // Assert
@@ -238,6 +314,44 @@ namespace WorkflowSample.Engine.Tests
         }
 
         [Test]
+        public void GetAllowedActions_GivenProcurementApproval_AndNotApprover_ShouldBeEmpty()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = new User("jim");
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ProcurementApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.IsEmpty(allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenProcurementApproval_AndApproverIsCurrentUser_ShouldBe_Approve()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = approver;
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.ProcurementApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
+
+        [Test]
         public void Approve_WhenHODApproval_GivenNonEmployee_ShouldSetToBookTickets()
         {
             // Arrange
@@ -270,6 +384,44 @@ namespace WorkflowSample.Engine.Tests
             var travelRequest = new TravelRequest();
             SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
             var workflow = CreateTravelRequestWorkflow();
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Approve }, allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenHODApproval_AndNotApprover_ShouldBeEmpty()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = new User("jim");
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.IsEmpty(allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenHODApproval_AndApproverIsCurrentUser_ShouldBe_Approve()
+        {
+            // Arrange
+            var approver = new User("bob");
+            var currentUser = approver;
+            var travelRequest = new TravelRequest
+            {
+                Approver = approver
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.HODApproval);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
             // Act
             var allowedActions = workflow.GetAllowedActions(travelRequest);
             // Assert
