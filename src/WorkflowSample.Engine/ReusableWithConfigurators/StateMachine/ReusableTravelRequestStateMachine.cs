@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Stateless;
 
 namespace WorkflowSample.Engine
@@ -7,22 +8,12 @@ namespace WorkflowSample.Engine
     {
         private readonly TravelRequestStateMachineContext _stateMachineContext;
 
-        public ReusableTravelRequestStateMachine()
+        public ReusableTravelRequestStateMachine(List<IReusableTravelRequestStateMachineConfigurator> configurators)
         {
+            if (configurators == null) throw new ArgumentNullException(nameof(configurators));
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestAction>(GetState, SetState);
             _stateMachineContext = new TravelRequestStateMachineContext(stateMachine);
 
-            var configurators = new List<IReusableTravelRequestStateMachineConfigurator>
-            {
-                new TravelRequestNewStateConfigurator(),
-                new TravelRequestCapturedStateConfigurator(),
-                new TravelRequestTravelerReviewStateConfigurator(),
-                new TravelRequestHRApprovalStateConfigurator(),
-                new TravelRequestManagerApprovalStateConfigurator(),
-                new TravelRequestProcurementApprovalStateConfigurator(),
-                new TravelRequestHODApprovalStateConfigurator(),
-                new TravelRequestBookTicketsStateConfigurator(),
-            };
             configurators.ForEach(configurator => configurator.Configure(_stateMachineContext));
         }
 

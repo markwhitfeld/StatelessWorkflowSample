@@ -7,8 +7,15 @@ namespace WorkflowSample.Engine
 {
     public class TravelRequestWorkflow_Simple : ITravelRequestWorkflow
     {
+        private readonly IUserSecurityContext _userSecurityContext;
 
-        private static StateMachine<TravelRequestState, TravelRequestAction> WithStateMachineFor(TravelRequest travelRequest)
+        public TravelRequestWorkflow_Simple(IUserSecurityContext userSecurityContext)
+        {
+            if (userSecurityContext == null) throw new ArgumentNullException(nameof(userSecurityContext));
+            _userSecurityContext = userSecurityContext;
+        }
+
+        private StateMachine<TravelRequestState, TravelRequestAction> WithStateMachineFor(TravelRequest travelRequest)
         {
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestAction>(() => travelRequest.Status,
                 ((ISupportWorkflowState<TravelRequestState>) travelRequest).SetStatus);
@@ -21,7 +28,7 @@ namespace WorkflowSample.Engine
                 .PermitIf(TravelRequestAction.Submit, TravelRequestState.HRApproval, () => !travelRequest.IsEmployee);
 
             stateMachine.Configure(TravelRequestState.TravelerReview)
-                .Permit(TravelRequestAction.Accept, TravelRequestState.ManagerApproval);
+                .PermitIf(TravelRequestAction.Accept, TravelRequestState.ManagerApproval, () => travelRequest.Traveller == _userSecurityContext.CurrentUser);
 
             stateMachine.Configure(TravelRequestState.HRApproval)
                 .Permit(TravelRequestAction.Approve, TravelRequestState.ProcurementApproval);

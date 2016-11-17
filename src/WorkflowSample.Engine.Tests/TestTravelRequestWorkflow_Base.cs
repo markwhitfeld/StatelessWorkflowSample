@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using NUnit.Framework;
 
 namespace WorkflowSample.Engine.Tests
@@ -10,7 +12,7 @@ namespace WorkflowSample.Engine.Tests
     [TestFixture]
     public abstract class TestTravelRequestWorkflow_Base
     {
-        protected abstract ITravelRequestWorkflow CreateTravelRequestWorkflow();
+        protected abstract ITravelRequestWorkflow CreateTravelRequestWorkflow(IUserSecurityContext userSecurityContext = null);
 
         private static void SetTravelRequestStatus(TravelRequest travelRequest, TravelRequestState travelRequestState)
         {
@@ -100,6 +102,44 @@ namespace WorkflowSample.Engine.Tests
             var travelRequest = new TravelRequest();
             SetTravelRequestStatus(travelRequest, TravelRequestState.TravelerReview);
             var workflow = CreateTravelRequestWorkflow();
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.AreEquivalent(new[] { TravelRequestAction.Accept }, allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenTravelerReview_AndNotTraveller_ShouldBeEmpty()
+        {
+            // Arrange
+            var traveller = new User("bob");
+            var currentUser = new User("jim");
+            var travelRequest = new TravelRequest
+            {
+                Traveller = traveller
+            };
+            var userSecurityContext = new UserSecurityContext() {CurrentUser = currentUser};
+            SetTravelRequestStatus(travelRequest, TravelRequestState.TravelerReview);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
+            // Act
+            var allowedActions = workflow.GetAllowedActions(travelRequest);
+            // Assert
+            CollectionAssert.IsEmpty(allowedActions);
+        }
+
+        [Test]
+        public void GetAllowedActions_GivenTravelerReview_AndTravellerIsCurrentUser_ShouldBe_Accept()
+        {
+            // Arrange
+            var traveller = new User("bob");
+            var currentUser = traveller;
+            var travelRequest = new TravelRequest
+            {
+                Traveller = traveller
+            };
+            var userSecurityContext = new UserSecurityContext() { CurrentUser = currentUser };
+            SetTravelRequestStatus(travelRequest, TravelRequestState.TravelerReview);
+            var workflow = CreateTravelRequestWorkflow(userSecurityContext);
             // Act
             var allowedActions = workflow.GetAllowedActions(travelRequest);
             // Assert

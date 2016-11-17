@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITravelRequestWorkflow.cs" />
+    <Compile Include="IUserSecurityContext.cs" />
     <Compile Include="ReusableWithConfigurators\TravelRequestWorkflow_ReusableWithConfigurators.cs" />
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestBookTicketsStateConfigurator.cs" />
     <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestHODApprovalStateConfigurator.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="ReusableWithConfigurators\StateMachine\TravelRequestStateMachineContext.cs" />
     <Compile Include="ReusableWithConfigurators\StateMachine\ReusableTravelRequestStateMachine.cs" />
     <Compile Include="Simple\TravelRequestWorkflow_Simple.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserSecurityContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

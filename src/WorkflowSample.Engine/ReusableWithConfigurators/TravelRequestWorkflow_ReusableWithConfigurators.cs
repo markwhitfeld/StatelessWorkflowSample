@@ -7,8 +7,15 @@ namespace WorkflowSample.Engine
 {
     public class TravelRequestWorkflow_ReusableWithConfigurators : ITravelRequestWorkflow
     {
-        private readonly ReusableTravelRequestStateMachine _reusableTravelRequestStateMachine = new ReusableTravelRequestStateMachine();
-        
+        private readonly ReusableTravelRequestStateMachine _reusableTravelRequestStateMachine;
+
+        public TravelRequestWorkflow_ReusableWithConfigurators(ReusableTravelRequestStateMachine reusableTravelRequestStateMachine)
+        {
+            if (reusableTravelRequestStateMachine == null)
+                throw new ArgumentNullException(nameof(reusableTravelRequestStateMachine));
+            _reusableTravelRequestStateMachine = reusableTravelRequestStateMachine;
+        }
+
         private ReusableTravelRequestStateMachine WithStateMachineFor(TravelRequest travelRequest)
         {
             // Potential for cross threading issues here... this may be a pipe dream

@@ -8,10 +8,7 @@ namespace WorkflowSample.Engine.Tests
         [Test]
         public void DummyTestToAbsorbTestRunnerAndJitCompileWarmup()
         {
-            new TravelRequest();
-            new TravelRequestWorkflow_Simple();
-            new TravelRequestWorkflow_ReusableWithConfigurators();
-            new TravelRequestWorkflow_SimpleWithConfigurators(new StateMachineFactory(new TravelRequestWorkflowGeneralConfigurator()));
+            new TravelRequest().GetType().Assembly.GetTypes();
             Assert.Pass();
         }
     }

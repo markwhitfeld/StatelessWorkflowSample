@@ -1,16 +1,27 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace WorkflowSample.Engine.Tests
 {
     [TestFixture]
     public class TestTravelRequestWorkflow_ReusableWithConfigurators : TestTravelRequestWorkflow_Base
     {
-        private TravelRequestWorkflow_ReusableWithConfigurators _travelRequestWorkflowReusableWithConfigurators;
-
-        protected override ITravelRequestWorkflow CreateTravelRequestWorkflow()
+        protected override ITravelRequestWorkflow CreateTravelRequestWorkflow(IUserSecurityContext userSecurityContext = null)
         {
-            _travelRequestWorkflowReusableWithConfigurators = _travelRequestWorkflowReusableWithConfigurators ?? new TravelRequestWorkflow_ReusableWithConfigurators();
-            return _travelRequestWorkflowReusableWithConfigurators;
+            userSecurityContext = userSecurityContext ?? new UserSecurityContext();
+            var reusableTravelRequestStateMachineConfigurators = new List<IReusableTravelRequestStateMachineConfigurator>
+            {
+                new TravelRequestNewStateConfigurator(),
+                new TravelRequestCapturedStateConfigurator(),
+                new TravelRequestTravelerReviewStateConfigurator(userSecurityContext),
+                new TravelRequestHRApprovalStateConfigurator(),
+                new TravelRequestManagerApprovalStateConfigurator(),
+                new TravelRequestProcurementApprovalStateConfigurator(),
+                new TravelRequestHODApprovalStateConfigurator(),
+                new TravelRequestBookTicketsStateConfigurator(),
+            };
+            var reusableTravelRequestStateMachine = new ReusableTravelRequestStateMachine(reusableTravelRequestStateMachineConfigurators);
+            return new TravelRequestWorkflow_ReusableWithConfigurators(reusableTravelRequestStateMachine);
         }
     }
 }
