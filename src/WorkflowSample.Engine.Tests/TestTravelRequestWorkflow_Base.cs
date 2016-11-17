@@ -8,12 +8,9 @@ using NUnit.Framework;
 namespace WorkflowSample.Engine.Tests
 {
     [TestFixture]
-    public class TestTravelRequestWorkflow
+    public abstract class TestTravelRequestWorkflow_Base
     {
-        private static TravelRequestWorkflow_Simple CreateTravelRequestWorkflow()
-        {
-            return new TravelRequestWorkflow_Simple();
-        }
+        protected abstract ITravelRequestWorkflow CreateTravelRequestWorkflow();
 
         private static void SetTravelRequestStatus(TravelRequest travelRequest, TravelRequestState travelRequestState)
         {

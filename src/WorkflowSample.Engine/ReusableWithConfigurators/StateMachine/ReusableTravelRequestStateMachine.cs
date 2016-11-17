@@ -3,11 +3,11 @@ using Stateless;
 
 namespace WorkflowSample.Engine
 {
-    public class TravelRequestStateMachine
+    public class ReusableTravelRequestStateMachine
     {
         private readonly TravelRequestStateMachineContext _stateMachineContext;
 
-        public TravelRequestStateMachine()
+        public ReusableTravelRequestStateMachine()
         {
             var stateMachine = new StateMachine<TravelRequestState, TravelRequestAction>(GetState, SetState);
             _stateMachineContext = new TravelRequestStateMachineContext(stateMachine);

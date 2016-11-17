@@ -53,21 +53,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITravelRequestWorkflow.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestBookTicketsStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestHODApprovalStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestHRApprovalStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestManagerApprovalStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestProcurementApprovalStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestTravelerReviewStateConfigurator.cs" />
-    <Compile Include="StateMachine\ISupportWorkflowState.cs" />
-    <Compile Include="StateMachine\Configurators\ITravelRequestStateMachineConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\TravelRequestWorkflow_ReusableWithConfigurators.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestBookTicketsStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestHODApprovalStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestHRApprovalStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestManagerApprovalStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestProcurementApprovalStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestTravelerReviewStateConfigurator.cs" />
+    <Compile Include="ISupportWorkflowState.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\ITravelRequestStateMachineConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestCapturedStateConfigurator.cs" />
-    <Compile Include="StateMachine\Configurators\TravelRequestNewStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestCapturedStateConfigurator.cs" />
+    <Compile Include="ReusableWithConfigurators\Configurators\TravelRequestNewStateConfigurator.cs" />
     <Compile Include="TravelRequestEnums.cs" />
     <Compile Include="TravelRequest.cs" />
-    <Compile Include="StateMachine\TravelRequestStateMachineContext.cs" />
-    <Compile Include="StateMachine\TravelRequestStateMachine.cs" />
+    <Compile Include="ReusableWithConfigurators\StateMachine\TravelRequestStateMachineContext.cs" />
+    <Compile Include="ReusableWithConfigurators\StateMachine\ReusableTravelRequestStateMachine.cs" />
     <Compile Include="Simple\TravelRequestWorkflow_Simple.cs" />
   </ItemGroup>
   <ItemGroup>
